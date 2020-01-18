@@ -42,16 +42,16 @@ if [[ $DOSETUP =~ "y" ]] ; then
   cd
 
   ## INSTALL
-  wget https://github.com/DAPSCoin/DAPSCoin/releases/download/1.0.4/master_linux-v1.0.4.6.zip
+  wget https://github.com/DAPSCoin/DAPSCoin/releases/download/1.0.5/dapscoin-v1.0.5.7-linux.zip
   sudo apt-get install unzip
-  sudo unzip master_linux-v1.0.4.6.zip -d /usr/local/bin
+  sudo unzip dapscoin-v1.0.5.7-linux.zip -d /usr/local/bin
   chmod +x /usr/local/bin/dapscoind
   chmod +x /usr/local/bin/dapscoin-cli
   chmod +x /usr/local/bin/dapscoin-qt
   sudo chmod 755 daspcoin*
   sudo mv dapscoin* /usr/bin
   cd
-  rm -rf master_linux-v1.0.4.6.zip
+  rm -rf dapscoin-v1.0.5.7-linux.zip
 
   echo "Setting up and enabling fail2ban..."
   sudo apt-get install fail2ban -y
