@@ -38,11 +38,12 @@ if [[ $DOSETUP =~ "y" ]] ; then
   sudo tar xzvf index-0.13.9-x86_64-linux-gnu.tar.gz 
   rm -rf index-0.13.9-x86_64-linux-gnu.tar.gz
 
-  echo "Setting up and enabling fail2ban..."
-  sudo apt-get install fail2ban -y
-  sudo ufw allow ssh
-  sudo ufw allow 7082
-  sudo ufw enable
+  sudo apt-get install -y ufw
+  sudo ufw allow ssh/tcp
+  sudo ufw limit ssh/tcp
+  sudo ufw logging on
+  echo "y" | sudo ufw enable
+  sudo ufw status
 
   mkdir -p ~/index-0.13.9/bin
   echo 'export PATH=~/index-0.13.9/bin:$PATH' > ~/.bash_aliases
