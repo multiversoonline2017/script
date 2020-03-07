@@ -44,13 +44,13 @@ if [[ $DOSETUP =~ "y" ]] ; then
   sudo ufw allow 7082
   sudo ufw enable
 
-  mkdir -p ~/usr/index-0.13.9/bin
-  echo 'export PATH=~/usr/index-0.13.9/bin:$PATH' > ~/.bash_aliases
+  mkdir -p ~/index-0.13.9/bin
+  echo 'export PATH=~/index-0.13.9/bin:$PATH' > ~/.bash_aliases
   source ~/.bashrc
 fi
 
 ## Setup conf
-mkdir -p ~/usr/index-0.13.9/bin
+mkdir -p ~/index-0.13.9/bin
 IP=$(curl -s4 http://ip.42.pl/raw)
 NAME="index"
 CONF_FILE=index.conf
@@ -84,11 +84,11 @@ for i in `seq 1 1 $MNCOUNT`; do
   CONF_DIR=~/.${NAME}_$ALIAS
 
   # Create scripts
-  echo '#!/usr/index-0.13.9/bin/bash' > ~/usr/index-0.13.9/bin/${NAME}d_$ALIAS.sh
-  echo "${NAME}d -daemon -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/usr/index-0.13.9/bin/${NAME}d_$ALIAS.sh
-  echo '#!/usr/index-0.13.9/bin/bash' > ~/usr/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
-  echo "${NAME}-cli -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/usr/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
-  chmod 755 ~/usr/index-0.13.9/bin/${NAME}*.sh
+  echo '#!/index-0.13.9/bin/bash' > ~/index-0.13.9/bin/${NAME}d_$ALIAS.sh
+  echo "${NAME}d -daemon -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/index-0.13.9/bin/${NAME}d_$ALIAS.sh
+  echo '#!/index-0.13.9/bin/bash' > ~/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
+  echo "${NAME}-cli -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
+  chmod 755 ~/index-0.13.9/bin/${NAME}*.sh
 
   mkdir -p $CONF_DIR
   echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> ${NAME}.conf_TEMP
@@ -111,5 +111,5 @@ for i in `seq 1 1 $MNCOUNT`; do
 
   mv ${NAME}.conf_TEMP $CONF_DIR/${NAME}.conf
   
-  sh ~/usr/index-0.13.9/bin/${NAME}d_$ALIAS.sh
+  sh ~/index-0.13.9/bin/${NAME}d_$ALIAS.sh
 done
