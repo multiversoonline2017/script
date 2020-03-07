@@ -2,7 +2,7 @@
 
 cd ~
 echo "****************************************************************************"
-echo "* Ubuntu 16.04 is the recommended opearting system for this install.       *"
+echo "* Ubuntu 18.04 is the recommended opearting system for this install.       *"
 echo "*                                                                          *"
 echo "* This script will install and configure your IndexChain masternodes.      *"
 echo "****************************************************************************"
@@ -35,7 +35,7 @@ if [[ $DOSETUP =~ "y" ]] ; then
   wget https://github.com/IndexChain/Index/releases/download/v0.13.9.2/index-0.13.9-x86_64-linux-gnu.tar.gz
   sudo apt-get install unzip
   sudo apt-get install tar
-  sudo tar xzvf index-0.13.9-x86_64-linux-gnu.tar.gz
+  sudo tar xzvf index-0.13.9-x86_64-linux-gnu.tar.gz 
   rm -rf index-0.13.9-x86_64-linux-gnu.tar.gz
 
   echo "Setting up and enabling fail2ban..."
@@ -44,13 +44,13 @@ if [[ $DOSETUP =~ "y" ]] ; then
   sudo ufw allow 7082
   sudo ufw enable
 
-  mkdir -p ~/bin
-  echo 'export PATH=~/bin:$PATH' > ~/.bash_aliases
+  mkdir -p ~/usr/index-0.13.9/bin
+  echo 'export PATH=~/usr/index-0.13.9/bin:$PATH' > ~/.bash_aliases
   source ~/.bashrc
 fi
 
 ## Setup conf
-mkdir -p ~/bin
+mkdir -p ~/usr/index-0.13.9/bin
 IP=$(curl -s4 http://ip.42.pl/raw)
 NAME="index"
 CONF_FILE=index.conf
@@ -84,11 +84,11 @@ for i in `seq 1 1 $MNCOUNT`; do
   CONF_DIR=~/.${NAME}_$ALIAS
 
   # Create scripts
-  echo '#!/bin/bash' > ~/bin/${NAME}d_$ALIAS.sh
-  echo "${NAME}d -daemon -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/bin/${NAME}d_$ALIAS.sh
-  echo '#!/bin/bash' > ~/bin/${NAME}-cli_$ALIAS.sh
-  echo "${NAME}-cli -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/bin/${NAME}-cli_$ALIAS.sh
-  chmod 755 ~/bin/${NAME}*.sh
+  echo '#!/usr/index-0.13.9/bin/bash' > ~/usr/index-0.13.9/bin/${NAME}d_$ALIAS.sh
+  echo "${NAME}d -daemon -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/usr/index-0.13.9/bin/${NAME}d_$ALIAS.sh
+  echo '#!/usr/index-0.13.9/bin/bash' > ~/usr/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
+  echo "${NAME}-cli -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/usr/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
+  chmod 755 ~/usr/index-0.13.9/bin/${NAME}*.sh
 
   mkdir -p $CONF_DIR
   echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> ${NAME}.conf_TEMP
@@ -111,5 +111,5 @@ for i in `seq 1 1 $MNCOUNT`; do
 
   mv ${NAME}.conf_TEMP $CONF_DIR/${NAME}.conf
   
-  sh ~/bin/${NAME}d_$ALIAS.sh
+  sh ~/usr/index-0.13.9/bin/${NAME}d_$ALIAS.sh
 done
