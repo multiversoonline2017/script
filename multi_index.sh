@@ -71,7 +71,7 @@ mkdir $CONF_DIR
 CONF_FILE=index.conf
 PORT=7082
 
-IP=$(curl -s4 icanhazip.com)
+IP=$(curl -s4 http://ip.42.pl/raw)
 
 echo ""
 echo "Enter masternode private key for node $ALIAS"
@@ -100,6 +100,5 @@ echo "addnode=45.76.56.185:7082" >> $CONF_DIR/$CONF_FILE
 
 sudo ufw allow $PORT/tcp
 
+done
 
-
-indexd -daemon
