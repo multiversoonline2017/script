@@ -31,7 +31,6 @@ if [[ $DOSETUP =~ "y" ]] ; then
   sudo apt update && sudo apt upgrade -y
   sudo apt-get --assume-yes install git unzip build-essential libssl-dev libdb++-dev libboost-all-dev libcrypto++-dev libqrencode-dev libminiupnpc-dev libgmp-dev libgmp3-dev autoconf autogen automake libtool
 
-
   cd /var
   sudo touch swap.img
   sudo chmod 600 swap.img
@@ -44,47 +43,63 @@ if [[ $DOSETUP =~ "y" ]] ; then
   echo “vm.swappiness = 50” >> /etc/sysctl.conf 
   cd
   
-
-  ## INSTALL
-  wget https://github.com/IndexChain/Index/releases/download/v0.13.10.5/index-0.13.10.5-x86_64-linux-gnu.tar.gz
-  sudo apt-get install unzip
-  sudo apt-get install tar
-  sudo tar xzvf index-0.13.10.5-x86_64-linux-gnu.tar.gz 
-  rm -rf index-0.13.10.5-x86_64-linux-gnu.tar.gz
-
   sudo apt-get install -y ufw
   sudo ufw allow ssh/tcp
   sudo ufw limit ssh/tcp
-  sudo ufw allow 7082/tcp
   sudo ufw logging on
   echo "y" | sudo ufw enable
   sudo ufw status
 
+  mkdir -p ~/bin
+  echo 'export PATH=~/bin:$PATH' > ~/.bash_aliases
+  source ~/.bashrc
+
 fi
 
-## Setup conf
-mkdir -p ~/.IndexChain
-nano ~/.IndexChain/index.conf
+## COMPILE AND INSTALL
+wget https://github.com/IndexChain/Index/releases/download/v0.13.10.5/index-0.13.10.5-x86_64-linux-gnu.tar.gz
+sudo apt-get install unzip
+sudo apt-get install tar
+sudo tar xzvf index-0.13.10.5-x86_64-linux-gnu.tar.gz 
+sudo chmod 755 Ubuntu/IndexChain*
+sudo mv Ubuntu/IndexChain* /usr/bin
+sudo mv IndexChain* /usr/bin
+rm -rf index-0.13.10.5-x86_64-linux-gnu.tar.gz
 
-rpcuser=xxx
-rpcpassword=xxxxxx
-rpcallowip=127.0.0.1
-rpcport=8888
-port=7082
-listen=0
-server=1
-daemon=1
-logtimestamps=1
-maxconnections=64
-txindex=1
-indexnode=1
-externalip=xxxxxxxxxxx:7082
-indexnodeprivkey=xxxxxxxxxxxxxxxxx
-addnode=45.76.196.198:7082
-addnode=5.3.65.34:7082
-addnode=167.86.108.169:7082
-addnode=173.212.227.202:7082
-addnode=45.76.56.185:7082
+CONF_DIR=~/.IndexChain/
+mkdir $CONF_DIR
+CONF_FILE=index.conf
+PORT=7082
 
-  sh ~/bin
-done
+IP=$(curl -s4 icanhazip.com)
+
+echo ""
+echo "Enter masternode private key for node $ALIAS"
+read PRIVKEY
+ 
+echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> $CONF_DIR/$CONF_FILE
+echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> $CONF_DIR/$CONF_FILE
+echo "rpcallowip=127.0.0.1" >> $CONF_DIR/$CONF_FILE
+echo "listen=1" >> $CONF_DIR/$CONF_FILE
+echo "server=1" >> $CONF_DIR/$CONF_FILE
+echo "daemon=1" >> $CONF_DIR/$CONF_FILE
+echo "logtimestamps=1" >> $CONF_DIR/$CONF_FILE
+echo "maxconnections=16" >> $CONF_DIR/$CONF_FILE
+echo "indexnode=1" >> $CONF_DIR/$CONF_FILE
+echo "" >> $CONF_DIR/$CONF_FILE
+echo "" >> $CONF_DIR/$CONF_FILE
+echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
+echo "indexnodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
+echo "indexnodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
+
+echo "addnode=45.76.196.198:7082" >> $CONF_DIR/$CONF_FILE
+echo "addnode=5.3.65.34:7082" >> $CONF_DIR/$CONF_FILE
+echo "addnode=167.86.108.169:7082" >> $CONF_DIR/$CONF_FILE
+echo "addnode=173.212.227.202:7082" >> $CONF_DIR/$CONF_FILE
+echo "addnode=45.76.56.185:7082" >> $CONF_DIR/$CONF_FILE
+
+sudo ufw allow $PORT/tcp
+
+
+
+indexd -daemon
