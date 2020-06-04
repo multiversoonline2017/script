@@ -104,7 +104,7 @@ for i in `seq 1 1 $MNCOUNT`; do
   echo "indexnode=1" >> ${NAME}.conf_TEMP
   echo "indexnodeprivkey=$PRIVKEY" >> ${NAME}.conf_TEMP
   
-  sudo ufw allow [$IPADDRESS]:7082/tcp
+  sudo ufw allow [$IPADDRESS]:7082
 
   mv ${NAME}.conf_TEMP $CONF_DIR/${NAME}.conf
   
