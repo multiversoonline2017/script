@@ -100,5 +100,3 @@ echo "addnode=45.76.56.185:7082" >> $CONF_DIR/$CONF_FILE
 
 sudo ufw allow $PORT/tcp
 
-done
-
