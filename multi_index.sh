@@ -32,32 +32,33 @@ if [[ $DOSETUP =~ "y" ]] ; then
   
 
   ## INSTALL
-  wget https://github.com/IndexChain/Index/releases/download/v0.13.9.2/index-0.13.9-x86_64-linux-gnu.tar.gz
+  wget https://github.com/IndexChain/Index/releases/download/v0.13.10.5/index-0.13.10.5-x86_64-linux-gnu.tar.gz
   sudo apt-get install unzip
   sudo apt-get install tar
-  sudo tar xzvf index-0.13.9-x86_64-linux-gnu.tar.gz 
-  rm -rf index-0.13.9-x86_64-linux-gnu.tar.gz
+  sudo tar xzvf index-0.13.10.5-x86_64-linux-gnu.tar.gz 
+  rm -rf index-0.13.10.5-x86_64-linux-gnu.tar.gz
 
   sudo apt-get install -y ufw
   sudo ufw allow ssh/tcp
   sudo ufw limit ssh/tcp
+  sudo ufw allow 7082/tcp
   sudo ufw logging on
   echo "y" | sudo ufw enable
   sudo ufw status
 
-  mkdir -p ~/index-0.13.9/bin
-  echo 'export PATH=~/index-0.13.9/bin:$PATH' > ~/.bash_aliases
+  mkdir -p ~/index-0.13.10.5/bin
+  echo 'export PATH=~/index-0.13.10.5/bin:$PATH' > ~/.bash_aliases
   source ~/.bashrc
 fi
 
 ## Setup conf
-mkdir -p ~/index-0.13.9/bin
+mkdir -p ~/index-0.13.10.5/bin
 IP=$(curl -s4 http://ip.42.pl/raw)
 NAME="index"
 CONF_FILE=index.conf
 
 MNCOUNT=""
-re='^[0-5]+$'
+re='^[0-1]+$'
 while ! [[ $MNCOUNT =~ $re ]] ; do
    echo ""
    echo "How many nodes do you want to create on this server?, followed by [ENTER]:"
@@ -70,11 +71,11 @@ for i in `seq 1 1 $MNCOUNT`; do
   read ALIAS  
 
   echo ""
-  echo "Enter IPV6 for node $ALIAS (enter your ipv6 address here)"
+  echo "Enter IPV4 for node $ALIAS (enter your ipv4 address here)"
   read IPADDRESS
 
   echo ""
-  echo "Enter RPC Port (Any valid free port: i.E. 9001)"
+  echo "Enter RPC Port (Any valid free port: i.E. 7082)"
   read RPCPORT
 
   echo ""
@@ -85,11 +86,11 @@ for i in `seq 1 1 $MNCOUNT`; do
   CONF_DIR=~/.${NAME}_$ALIAS
 
   # Create scripts
-  echo '#!/index-0.13.9/bin/bash' > ~/index-0.13.9/bin/${NAME}d_$ALIAS.sh
-  echo "${NAME}d -daemon -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/index-0.13.9/bin/${NAME}d_$ALIAS.sh
-  echo '#!/index-0.13.9/bin/bash' > ~/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
-  echo "${NAME}-cli -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/index-0.13.9/bin/${NAME}-cli_$ALIAS.sh
-  chmod 755 ~/index-0.13.9/bin/${NAME}*.sh
+  echo '#!/index-0.13.10.5/bin/bash' > ~/index-0.13.10.5/bin/${NAME}d_$ALIAS.sh
+  echo "${NAME}d -daemon -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/index-0.13.10.5/bin/${NAME}d_$ALIAS.sh
+  echo '#!/index-0.13.10.5/bin/bash' > ~/index-0.13.10.5/bin/${NAME}-cli_$ALIAS.sh
+  echo "${NAME}-cli -conf=$CONF_DIR/${NAME}.conf -datadir=$CONF_DIR "'$*' >> ~/index-0.13.10.5/bin/${NAME}-cli_$ALIAS.sh
+  chmod 755 ~/index-0.13.10.5/bin/${NAME}*.sh
 
   mkdir -p $CONF_DIR
   echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> ${NAME}.conf_TEMP
@@ -103,14 +104,14 @@ for i in `seq 1 1 $MNCOUNT`; do
   echo "maxconnections=64" >> ${NAME}.conf_TEMP
   echo "IPADDRESS=[$IPADDRESS]" >> ${NAME}.conf_TEMP
   echo "externalip=[$IPADDRESS]" >> ${NAME}.conf_TEMP
-  echo "znodeaddr=[$IPADDRESS]:7082" >> ${NAME}.conf_TEMP
+  echo "indexnodeaddr=[$IPADDRESS]:7082" >> ${NAME}.conf_TEMP
   echo "bind=[$IPADDRESS]:7082" >> ${NAME}.conf_TEMP
-  echo "znode=1" >> ${NAME}.conf_TEMP
-  echo "znodeprivkey=$PRIVKEY" >> ${NAME}.conf_TEMP
+  echo "indexnode=1" >> ${NAME}.conf_TEMP
+  echo "indexnodeprivkey=$PRIVKEY" >> ${NAME}.conf_TEMP
   
   sudo ufw allow [$IPADDRESS]:7082/tcp
 
   mv ${NAME}.conf_TEMP $CONF_DIR/${NAME}.conf
   
-  sh ~/index-0.13.9/bin/${NAME}d_$ALIAS.sh
+  sh ~/index-0.13.10.5/bin/${NAME}d_$ALIAS.sh
 done
