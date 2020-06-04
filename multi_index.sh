@@ -89,9 +89,8 @@ echo "indexnode=1" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
 echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
-echo "indexnodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
+echo "externalip=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
 echo "indexnodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
-
 echo "addnode=45.76.196.198:7082" >> $CONF_DIR/$CONF_FILE
 echo "addnode=5.3.65.34:7082" >> $CONF_DIR/$CONF_FILE
 echo "addnode=167.86.108.169:7082" >> $CONF_DIR/$CONF_FILE
@@ -99,4 +98,3 @@ echo "addnode=173.212.227.202:7082" >> $CONF_DIR/$CONF_FILE
 echo "addnode=45.76.56.185:7082" >> $CONF_DIR/$CONF_FILE
 
 sudo ufw allow $PORT/tcp
-
