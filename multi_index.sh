@@ -75,10 +75,6 @@ for i in `seq 1 1 $MNCOUNT`; do
   read IPADDRESS
 
   echo ""
-  echo "Enter RPC Port (Any valid free port: i.E. 7082)"
-  read RPCPORT
-
-  echo ""
   echo "Enter masternode private key for node $ALIAS"
   read PRIVKEY
 
@@ -96,7 +92,6 @@ for i in `seq 1 1 $MNCOUNT`; do
   echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> ${NAME}.conf_TEMP
   echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> ${NAME}.conf_TEMP
   echo "rpcallowip=127.0.0.1" >> ${NAME}.conf_TEMP
-  echo "rpcport=$RPCPORT" >> ${NAME}.conf_TEMP
   echo "listen=0" >> ${NAME}.conf_TEMP
   echo "server=1" >> ${NAME}.conf_TEMP
   echo "daemon=1" >> ${NAME}.conf_TEMP
