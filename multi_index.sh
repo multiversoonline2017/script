@@ -71,7 +71,7 @@ rpcpassword=xxxxxx
 rpcallowip=127.0.0.1
 rpcport=8888
 port=7082
--listen=0
+listen=0
 server=1
 daemon=1
 logtimestamps=1
@@ -86,5 +86,5 @@ addnode=167.86.108.169:7082
 addnode=173.212.227.202:7082
 addnode=45.76.56.185:7082
 
- 
+  sh ~/bin
 done
