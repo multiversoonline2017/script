@@ -61,9 +61,6 @@ wget https://github.com/IndexChain/Index/releases/download/v0.13.10.6/index-0.13
 sudo apt-get install unzip
 sudo apt-get install tar
 sudo tar xzvf index-0.13.10.6-x86_64-linux-gnu.tar.gz 
-sudo chmod 755 Ubuntu/IndexChain*
-sudo mv Ubuntu/IndexChain* /usr/bin
-sudo mv IndexChain* /usr/bin
 rm -rf index-0.13.10.6-x86_64-linux-gnu.tar.gz
 
 CONF_DIR=~/.IndexChain/
