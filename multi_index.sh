@@ -2,7 +2,7 @@
 
 cd ~
 echo "****************************************************************************"
-echo "* Ubuntu 18.04 is the recommended opearting system for this install.       *"
+echo "* Ubuntu 19.10 ou 20.04 is the recommended opearting system for this install.       *"
 echo "*                                                                          *"
 echo "* This script will install and configure your IndexChain masternodes.      *"
 echo "****************************************************************************"
